@@ -1,7 +1,5 @@
 import User from "../models/User.js";
 
-import bcrypt from "bcryptjs";
-
 const UserController = {
 
     index: async (req, res)=>{
@@ -31,6 +29,37 @@ const UserController = {
 
 
 },
+
+    //Uploads profile image
+    uploadProfileImage: async (req, res) => {
+        req.user.avatar = req.file.buffer;
+        await req.user.save();
+        res.send();
+
+    },
+
+    //Remove profile picture
+    removeProfileImage: async (req, res) => {
+        req.user.avatar = undefined;
+        await req.user.save();
+        res.send("Profile Picture removed");
+    },
+
+    //Get profile picture
+    getProfilePicture: async (req, res) => {
+        try{
+            const user = await User.findById(req.params.id);
+            if (!user || !user.avatar){
+                throw new Error();
+            }
+                res.set("Content-Type", "image/jpg");
+                res.send(user.avatar);
+
+        }catch (e) {
+            res.status(404).send();
+        }
+    },
+
 
     //Login User
     login: async (req, res) => {
