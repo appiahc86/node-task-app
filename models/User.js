@@ -9,13 +9,13 @@ const UserSchema = new Schema({
 
    name: {
        type: String,
-       required: true
+       required: [true, "Name is required"]
    },
 
    email: {
        type: String,
-       required: true,
-       unique: true,
+       required: [true, "Email is required"],
+       unique: [true, "fuck you"],
        lowercase: true
    },
 
@@ -74,7 +74,7 @@ UserSchema.statics.findByCredentials = async (email, password) => {
         return user;
     }
 }
-
+ 
 //Hash plain password
 UserSchema.pre('save', async function (next) {
 

@@ -13,6 +13,7 @@ const UserController = {
 
         let {name, email, password} = req.body;
 
+
        const newUser = new User({
             name,
             email,
@@ -20,11 +21,17 @@ const UserController = {
         });
 
         try {
+
+            const checkEmail = await User.findOne({email: email});
+            if (checkEmail){
+               throw new Error('User already exists')
+            }
             const user = await newUser.save();
-            const token = await user.generateAuthToken();
-            return  res.status(201).send({user, token});
+            // const token = await user.generateAuthToken(); 
+            return  res.status(201).send({user});
+
         }catch (e) {
-            return  res.status(500).send(e);
+            return  res.status(400).send(e.message);
         }
 
 
@@ -35,7 +42,6 @@ const UserController = {
         req.user.avatar = req.file.buffer;
         await req.user.save();
         res.send();
-
     },
 
     //Remove profile picture
@@ -65,18 +71,19 @@ const UserController = {
     login: async (req, res) => {
 
         try {
+           
             const user = await User.findByCredentials(req.body.email, req.body.password);
             const token = await user.generateAuthToken();
-            res.send({user, token});
+            res.status(200).send({user, token});
         }catch (e) {
-            res.status(400).send();
+            res.status(400).send(e.message);
         }
-
-
+ 
     },
 
     //Logout User
     logout: async (req, res) => {
+     
 
         try {
             //Remove the current token from the user's tokens array
@@ -84,9 +91,9 @@ const UserController = {
                 return token.token !== req.token;
             })
             await req.user.save();
-            res.send();
+            res.status(200).send("success");
         }catch (e) {
-            res.status(500).send();
+            res.status(500).send(e.message);
         }
     },
 

@@ -27,10 +27,10 @@ const TaskController = {
                     sort
                 }
             }).execPopulate();
-            res.send(req.user.tasks);
+            res.status(200).send(req.user.tasks);
 
         }catch (e) {
-            res.status(500).send();
+            res.status(500).send(e.message);
         }
 
     },
@@ -41,12 +41,12 @@ const TaskController = {
         const newTask = new Task({
             description: req.body.description,
             owner: req.user._id
-        });
+        }); 
 
         await newTask.save().then(()=>{
             res.status(201).send(newTask);
         }).catch((e)=>{
-            res.status(400).send(e);
+            res.status(400).send(e.message);
         });
 
     },
@@ -55,7 +55,7 @@ const TaskController = {
 
         await Task.findOne({_id: req.params.id, owner: req.user._id}).then((task) => {
             if (task){
-                return res.send(task);
+                return res.status(200).send(task);
             }else{
                 res.status(404).send();
             }
@@ -67,7 +67,7 @@ const TaskController = {
     update: async (req, res) => {
         const id = req.params.id;
         const obj = Object.keys(req.body)
-        console.log(obj)
+        // console.log(obj)
 
         const task = await Task.findById(id);
         if (task){
@@ -75,21 +75,26 @@ const TaskController = {
             task.completed = req.body.completed;
             await task.save().then(() =>{
                 res.status(200).send(task);
-            }).catch((e) => {return res.status(404).send()})
+            }).catch((e) => {return res.status(404).send(e.message)})
         }
         else {
-            res.send("Error occurred");
+            res.status(400).send("Error occurred");
         }
     },
 
     destroy: async (req, res) => {
+
+
         Task.findOneAndDelete({_id: req.params.id, owner: req.user._id})
             .then(()=>{
+
                 res.status(200).send();
             })
             .catch((e)=>{
-                res.status(500).send(e);
+                res.status(500).send(e.message);
             });
+    
+
     }
 
 }
