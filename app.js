@@ -7,7 +7,7 @@ const app = express();
 
 // app.use(morgan());
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 //ENV
 dotenv.config();
