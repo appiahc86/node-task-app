@@ -27,10 +27,6 @@ mongoose.connect(process.env.DB_CONNECTION,
 
 // const port = process.env.port || 3000;
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-});
 
 //Home Page
 app.get('/', (req, res)=>{
