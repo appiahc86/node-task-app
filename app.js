@@ -1,6 +1,5 @@
 import express from "express";
 import mongoose from "mongoose";
-import morgan from "morgan";
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -8,15 +7,8 @@ const app = express();
 
 app.use(cors());
 
-// app.all('*', function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     next();
-// });
 
 
-app.use(morgan());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -37,12 +29,6 @@ mongoose.connect(process.env.DB_CONNECTION,
     }
     );
 
-// const port = process.env.port || 3000;
-
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     next();
-// });
 
 //Home Page
 app.get('/', (req, res)=>{
