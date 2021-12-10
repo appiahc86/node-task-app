@@ -1,20 +1,21 @@
 import express from "express";
 import mongoose from "mongoose";
+import morgan from "morgan";
 import dotenv from "dotenv";
 import cors from "cors";
 
 const app = express();
 app.use(cors());
 
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+// app.all('*', function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     next();
+// });
 
 
-// app.use(morgan());
+app.use(morgan());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -55,9 +56,9 @@ import taskRouter from "./routes/tasks.js";
 app.use('/users', userRouter);
 app.use('/tasks', taskRouter);
 
-app.use( (req, res, next) => {
-    // return res.status(404).send("404 Page")
-});
+// app.use( (req, res, next) => {
+//     // return res.status(404).send("404 Page")
+// });
 
 app.use((err, req, res, next) => {
     
