@@ -24,10 +24,11 @@ mongoose.connect(process.env.DB_CONNECTION,
         useFindAndModify: false,
         useCreateIndex: true,
     },
-    ()=>{
-        console.log("Database Connected");
-    }
-    );
+    ).then(
+        ()=>{ console.log("Database Connected"); },
+        err => { console.log(err); }
+
+   )
 
 
 //Home Page
